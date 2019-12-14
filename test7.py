@@ -37,9 +37,10 @@ def button(x_t,y_t,w,h,action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     if x_t+w > mouse[0] > x_t and y_t+h > mouse[1] > y_t:
-        pygame.draw.rect(gameDisplay, red,(x_t,y_t,w,h))
         if click[0] == 1 and action != None:
             action()
+
+    pygame.draw.rect(gameDisplay, red,(x_t,y_t,w,h))
 
 def gui(type):
 	x_gu = display_width
@@ -80,23 +81,44 @@ def gui(type):
 		gameDisplay.blit(sett_con, (int(display_width * 0.01),int(display_height * 0.90)))
 		button(int(display_width * 0.02),int(display_height * 0.90),int(height_nyan * 0.50),int(witdh_nyan * 0.18),sett_loop)
 
+		pygame.display.update()
 	elif type == "shop":
 		Home_con = pygame.image.load('asset/ICONS/Home Icon.png')
 		Home_con = pygame.transform.smoothscale(Home_con, (int(witdh_nyan * 0.35), int(height_nyan * 0.25)))
 		gameDisplay.blit(Home_con, (int(display_width * 0.03),int(display_height * 0.01)))
 		button(int(display_width * 0.03),int(display_height * 0.009),int(height_nyan * 0.50),int(witdh_nyan * 0.20),game_loop)
 
+		pygame.display.update()
 	elif type == "MG":
+		largeText = pygame.font.Font('freesansbold.ttf',20) 
+
 		Home_con = pygame.image.load('asset/ICONS/Home Icon.png')
 		Home_con = pygame.transform.smoothscale(Home_con, (int(witdh_nyan * 0.35), int(height_nyan * 0.25)))
 		gameDisplay.blit(Home_con, (int(display_width * 0.03),int(display_height * 0.01)))
 		button(int(display_width * 0.03),int(display_height * 0.009),int(height_nyan * 0.50),int(witdh_nyan * 0.20),game_loop)
 
+		hangnyan_text = largeText.render('HangNyan', True, black)
 		HGN_con = pygame.image.load('asset/Minigame/Lobby Icons/Hangman.png')
 		HGN_con = pygame.transform.smoothscale(HGN_con, (int(witdh_nyan * 1.1), int(height_nyan * 1.1)))
 		gameDisplay.blit(HGN_con, (int(display_width * 0.01),int(display_height * 0.2)))
+		gameDisplay.blit(hangnyan_text, (int(display_width * 0.16),int(display_height * 0.56)))
 		button(int(display_width * 0.12),int(display_height * 0.25),int(height_nyan * 0.7),int(witdh_nyan * 0.8),game_loop)
 
+		ttc_text = largeText.render('Tic-Tac-Toe', True, black)
+		ttc_con = pygame.image.load('asset/Minigame/Lobby Icons/TicTacToe.png')
+		ttc_con = pygame.transform.smoothscale(ttc_con, (int(witdh_nyan * 0.8), int(height_nyan * 0.8)))
+		gameDisplay.blit(ttc_con, (int(display_width * 0.39),int(display_height * 0.29)))
+		gameDisplay.blit(ttc_text, (int(display_width * 0.46),int(display_height * 0.56)))
+		button(int(display_width * 0.43),int(display_height * 0.25),int(height_nyan * 0.7),int(witdh_nyan * 0.8),game_loop)
+
+		NIMP_text = largeText.render('NIMP', True, black)
+		NIMP_con = pygame.image.load('asset/Minigame/Lobby Icons/NIMP_Icon.png')
+		NIMP_con = pygame.transform.smoothscale(NIMP_con, (int(witdh_nyan * 1.1), int(height_nyan * 1.1)))
+		gameDisplay.blit(NIMP_con, (int(display_width * 0.63),int(display_height * 0.26)))
+		gameDisplay.blit(NIMP_text, (int(display_width * 0.80),int(display_height * 0.56)))
+		button(int(display_width * 0.72),int(display_height * 0.25),int(height_nyan * 0.7),int(witdh_nyan * 0.8),game_loop)
+
+		pygame.display.update()
 #draw BG
 def bg(bg,floor=None):
 	BG = pygame.image.load('asset/%s.png' % bg)
