@@ -27,7 +27,7 @@ witdh_nyan = int(display_width * 0.35)
 height_nyan = int(display_height * 0.37)
 
 #load image
-nyantaro_img = pygame.image.load('asset/KYET/Kyet (1).png')
+nyantaro_img = pygame.image.load('asset/KYET/Kyet_Jump.png')
 nyantaro_img = pygame.transform.smoothscale(nyantaro_img, (witdh_nyan, height_nyan))
 nyantaro_img2 = pygame.image.load('asset/KYET/Kyet Phase 2 (1).png')
 nyantaro_img2 = pygame.transform.smoothscale(nyantaro_img2, (witdh_nyan, height_nyan))
@@ -40,7 +40,7 @@ def button(x_t,y_t,w,h,action=None):
         if click[0] == 1 and action != None:
             action()
 
-    pygame.draw.rect(gameDisplay, red,(x_t,y_t,w,h))
+    #pygame.draw.rect(gameDisplay, red,(x_t,y_t,w,h))
 
 def gui(type):
 	x_gu = display_width
@@ -116,7 +116,7 @@ def gui(type):
 		NIMP_con = pygame.transform.smoothscale(NIMP_con, (int(witdh_nyan * 1.1), int(height_nyan * 1.1)))
 		gameDisplay.blit(NIMP_con, (int(display_width * 0.63),int(display_height * 0.26)))
 		gameDisplay.blit(NIMP_text, (int(display_width * 0.80),int(display_height * 0.56)))
-		button(int(display_width * 0.72),int(display_height * 0.25),int(height_nyan * 0.7),int(witdh_nyan * 0.8),game_loop)
+		button(int(display_width * 0.72),int(display_height * 0.25),int(height_nyan * 0.7),int(witdh_nyan * 0.8),nmp_loop)
 
 		pygame.display.update()
 #draw BG
@@ -150,18 +150,16 @@ def br_stuff():
 	if save_game['brain_power'] > 0:
 		save_game['brain_power'] = int(save_game['brain_power']) - 1
 
-def general_room_stuff():
+def general_room_stuff(mg = False):
 	for event in pygame.event.get():
 		if event.type == pygame.USEREVENT:
 			food_stuff()
-		if event.type == pygame.USEREVENT+1:
+		if event.type == pygame.USEREVENT+1 and mg == False:
 			br_stuff()
 		if event.type == pygame.USEREVENT+2:
-			print(save_game['food_level'])
 			save1 = json.dumps(save_game)
 			pickle.dump(save1, open("save_game.pickle", "wb"))
 		if event.type == pygame.QUIT:
-			print(save_game['food_level'])
 			save1 = json.dumps(save_game)
 			pickle.dump(save1, open("save_game.pickle", "wb"))
 			gameExit = True
@@ -334,5 +332,53 @@ def mg_loop():
 	
 		pygame.display.update()
 		clock.tick(60)
-mg_loop()
+
+def nmp_loop():
+	x =  (display_width * 0.30)
+	y = (display_height * 0.50)
+
+	x_change = 0
+	
+	frame_v = 1
+
+	gameExit = False
+
+	while not gameExit:
+		
+		frame_v += 1
+
+		gameExit = general_room_stuff(mg = True)
+	
+		#event for moving object
+		'''if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_LEFT:
+				x_change = -5
+			elif event.key == pygame.K_RIGHT:
+				x_change = 5
+		if event.type == pygame.KEYUP:
+			if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+				x_change = 0'''
+	
+		x += x_change
+	
+		#fill background with white	
+		bg('Nimp_Background')
+		n1 = 9
+		if 85 >= save_game['brain_power']:
+			n1 += 4
+		n2 = 0
+		for n in range(n1):
+			NIMP_asset_cn = pygame.image.load('asset/Minigame/Nimp [Completed]/Coin.png')
+			NIMP_asset_cn = pygame.transform.smoothscale(NIMP_asset_cn, (int(witdh_nyan * 0.9), int(height_nyan * 0.9)))
+			if n2 >= 9:
+				print(n2)
+				gameDisplay.blit(NIMP_asset_cn, (int(display_width * 0.005)*((n-n2)*19),int(display_height * 0.26)))
+			else:
+				n2 += 1
+				gameDisplay.blit(NIMP_asset_cn, (int(display_width * 0.005)*(n*19),int(display_height * 0.06)))
+		
+		pygame.display.update()
+		clock.tick(60)
+
+nmp_loop()
 pygame.quit()
