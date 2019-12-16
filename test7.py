@@ -1,8 +1,9 @@
 import pygame
-import pygame_functions
+import pygame_textinput
 import time
 import json
 import random
+import numpy as np
 import pickle
 from save_game_func import *
 
@@ -214,7 +215,7 @@ def game_loop():
 		gui('home')
 	
 		pygame.display.update()
-		clock.tick(60)
+		clock.tick(24)
 
 def shop_loop():
 	#Car info
@@ -231,7 +232,7 @@ def shop_loop():
 		
 		frame_v += 1
 
-		general_room_stuff()
+		gameExit = general_room_stuff()
 	
 		#event for moving object
 		'''if event.type == pygame.KEYDOWN:
@@ -255,7 +256,7 @@ def shop_loop():
 		gui('shop')
 	
 		pygame.display.update()
-		clock.tick(60)
+		clock.tick(24)
 
 def sett_loop():
 	#Car info
@@ -272,7 +273,7 @@ def sett_loop():
 		
 		frame_v += 1
 
-		general_room_stuff()
+		gameExit = general_room_stuff()
 	
 		#event for moving object
 		'''if event.type == pygame.KEYDOWN:
@@ -296,7 +297,7 @@ def sett_loop():
 		gui('shop')
 	
 		pygame.display.update()
-		clock.tick(60)
+		clock.tick(24)
 
 def mg_loop():
 	x =  (display_width * 0.30)
@@ -336,7 +337,7 @@ def mg_loop():
 		gui('MG')
 	
 		pygame.display.update()
-		clock.tick(60)
+		clock.tick(24)
 
 def nmp_loop():
 	x =  (display_width * 0.30)
@@ -372,7 +373,7 @@ def nmp_loop():
 				gameExit = True
 				return gameExit
 			print(event)
-	
+		
 		#event for moving object
 		'''if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_LEFT:
@@ -401,28 +402,6 @@ def nmp_loop():
 			NIMP_butto1_cn = pygame.image.load(f'asset/Minigame/Nimp [Completed]/button_{num}.png')
 			NIMP_butto1_cn = pygame.transform.smoothscale(NIMP_butto1_cn, (int(witdh_nyan * 0.5), int(height_nyan * 0.5)))
 			surface.blit(NIMP_butto1_cn, (int(display_width * 0.05)*(num*5),int(display_height * 0.6)))
-		if user_turn == True and (int(display_width * 0.05)*(1*5)+int(height_nyan * 0.6)) > mouse[0] > (int(display_width * 0.05)*(1*5)) and int(display_height * 0.6)+int(witdh_nyan * 0.5) > mouse[1] > int(display_height * 0.6):
-			if click[0] == 1:
-				user_turn = False
-				n1 -= 1
-				n3 = 1
-				print("test")
-		if user_turn == True and (int(display_width * 0.05)*(2*5)+int(height_nyan * 0.6)) > mouse[0] > (int(display_width * 0.05)*(2*5)) and int(display_height * 0.6)+int(witdh_nyan * 0.5) > mouse[1] > int(display_height * 0.6):
-			if click[0] == 1:
-				user_turn = False
-				n1 -= 2
-				n3 = 2
-		if user_turn == True and (int(display_width * 0.05)*(3*5)+int(height_nyan * 0.6)) > mouse[0] > (int(display_width * 0.05)*(3*5)) and int(display_height * 0.6)+int(witdh_nyan * 0.5) > mouse[1] > int(display_height * 0.6):
-			if click[0] == 1:
-				user_turn = False
-				n1 -= 3
-				n3 = 3
-
-		pygame.display.update()
-		if user_turn == False and n1 > 0:
-			pygame.time.delay(4000)
-			n1 -= (4-n3)
-			user_turn = True
 		if 0 >= n1:
 			if user_turn == True :
 				won_text = largeText.render('AI WON', True, black)
@@ -433,7 +412,7 @@ def nmp_loop():
 				mg_loop()
 				#surface.blit(reward_text, (int(display_width * 0.25),int(display_height * 0.4)))
 			elif user_turn == False:
-				won_text = largeText.render('AI WON', True, black)
+				won_text = largeText.render('USER WON', True, black)
 				reward_text = smallText.render('Gold: +100', True, black)
 				save_game['money'] += 100
 				if 80 >= save_game['brain_power']:
@@ -443,8 +422,293 @@ def nmp_loop():
 				pygame.display.update()
 				pygame.time.delay(5000)
 				mg_loop()
+		if user_turn == True and (int(display_width * 0.05)*(1*5)+int(height_nyan * 0.6)) > mouse[0] > (int(display_width * 0.05)*(1*5)) and int(display_height * 0.6)+int(witdh_nyan * 0.5) > mouse[1] > int(display_height * 0.6):
+			if click[0] == 1:
+				user_turn = False
+				n1 -= 1
+				n3 = 1
+				print("test")
+				
+		if user_turn == True and (int(display_width * 0.05)*(2*5)+int(height_nyan * 0.6)) > mouse[0] > (int(display_width * 0.05)*(2*5)) and int(display_height * 0.6)+int(witdh_nyan * 0.5) > mouse[1] > int(display_height * 0.6):
+			if click[0] == 1:
+				user_turn = False
+				n1 -= 2
+				n3 = 2
+				
+		if user_turn == True and (int(display_width * 0.05)*(3*5)+int(height_nyan * 0.6)) > mouse[0] > (int(display_width * 0.05)*(3*5)) and int(display_height * 0.6)+int(witdh_nyan * 0.5) > mouse[1] > int(display_height * 0.6):
+			if click[0] == 1:
+				user_turn = False
+				n1 -= 3
+				n3 = 3
+				
+		pygame.display.update()
+
+		if user_turn == False and n1 > 0:
+			n1 -= (4-n3)
+			user_turn = True
 
 		pygame.display.update()
-		clock.tick(60)
-mg_loop()
+		clock.tick(24)
+
+def ttc_loop():
+	SIZE = 3
+
+	HM_EPISODES = 1
+	LOSE_PENALTY = 350
+	WON_REWARD = 350
+	DRAW_REWARD = 175
+	epsilon = 0
+	EPS_DECAY = 0.9998  # Every episode will be epsilon*EPS_DECAY
+	SHOW_EVERY = 1  # how often to play through env visually.
+	
+	start_q_table ='qtable/qtable-1576318922-ttc-500000-gen2.1.pickle' # None or Filename
+	
+	LEARNING_RATE = 0.1
+	DISCOUNT = 0.99
+	
+	PLAYER_N = 1  # player key in dict
+	FOOD_N = 2  # food key in dict
+	ENEMY_N = 3  # enemy key in dict
+	
+	d = {1: (255, 175, 0),
+		2: (0, 255, 0),
+		3: (0, 0, 255)}
+	
+	with open(start_q_table, "rb") as f:
+	    q_table = pickle.load(f)
+	
+	episode_rewards = []
+	x =  (display_width * 0.30)
+	y = (display_height * 0.50)
+
+	x_change = 0
+	
+	frame_v = 1
+
+	gameExit = False
+	board = [0,0,0,0,0,0,0,0,0]
+	won_o = False
+	lose_o = False
+	episode_reward = 0
+	turn = 0
+	textinput = pygame_textinput.TextInput()
+	test2 = 10
+	turn_a = 0
+	largeText = pygame.font.Font('freesansbold.ttf',100) 
+	smallText = pygame.font.Font('freesansbold.ttf',40) 
+	while not gameExit:
+		turn += 1
+		frame_v += 1
+
+		bg('TTT_Background')
+		events = pygame.event.get()
+		for event in events:
+			if event.type == pygame.USEREVENT:
+				food_stuff()
+			if event.type == pygame.USEREVENT+2:
+				save1 = json.dumps(save_game)
+				pickle.dump(save1, open("save_game.pickle", "wb"))
+			if event.type == pygame.QUIT:
+				save1 = json.dumps(save_game)
+				pickle.dump(save1, open("save_game.pickle", "wb"))
+				gameExit = True
+			print(event)
+
+		#tic tac toe AI
+		obs = tuple(board)
+		if turn == 1:
+			action = np.random.randint(0, 9)
+			board[action] = 1
+			turn = 2
+		elif turn_a == 1 and turn >= 1:
+			if np.random.random() > epsilon and save_game['brain_power'] >= 95:
+			# GET THE ACTION
+				action = np.argmax(q_table[obs])
+			else:
+				action = np.random.randint(0, 9)
+			turn_a = 0
+			b = 0
+			for c in board:
+
+
+
+
+				if c == 0:
+					b += 1
+	
+			if  b !=0:
+				while board[action] != 0:
+					action = np.random.randint(0, 9)
+				board[action] = 1
+
+			if board[0] == 1 and board[1] == 1 and board[2] == 1:
+				won_o = True
+			elif board[3] == 1 and board[4] == 1 and board[5] == 1:
+				won_o = True
+			elif board[6] == 1 and board[7] == 1 and board[8] == 1:
+				won_o = True
+			#horz
+			elif board[1] == 1 and board[4] == 1 and board[7] == 1:
+				won_o = True
+			elif board[0] == 1 and board[3] == 1 and board[6] == 1:
+				won_o = True
+			elif board[2] == 1 and board[5] == 1 and board[8] == 1:
+				won_o = True
+			#dgonal
+			elif board[0] == 1 and board[4] == 1 and board[8] == 1:
+				won_o = True
+			elif board[2] == 1 and board[4] == 1 and board[6] == 1:
+				won_o = True
+			
+		n = 0
+		hh = 1
+		X_con = pygame.image.load('asset/Minigame/TTT/TTT_Cross.png')
+		O_con = pygame.image.load('asset/Minigame/TTT/TTT_Circle.png')
+		X_con = pygame.transform.smoothscale(X_con, (int(witdh_nyan * 0.5), int(height_nyan * 0.5)))
+		O_con = pygame.transform.smoothscale(O_con, (int(witdh_nyan * 0.5), int(height_nyan * 0.5)))
+		for h in range(len(board)):
+			n+=1
+			if board[h] == 1:
+				surface.blit(O_con, (int((display_width * (0.1*(n*2))))+(n*10),int(display_height * 0.19)*hh+((hh-1)*15)))
+				pygame.display.update()
+				print("|O|",end="")
+			elif board[h] == -1:
+				surface.blit(X_con, (int((display_width * (0.1*(n*2))))+(n*10),int(display_height * 0.19)*hh+((hh-1)*15)))
+				pygame.display.update()
+				print("|X|",end="")
+			elif board[h] == 0:
+				print("| |",end="")
+			if n == 3:
+				n=0
+				hh+=1
+		x += x_change
+	
+		#fill background with white	
+		
+		b = 0
+		for c in board:
+			if c == 0:
+				b += 1
+
+		test2 = 10
+		surface.blit(textinput.get_surface(), (int(display_width * 0.5),int(display_height * 0.85)))
+		if textinput.update(events):
+			test2 = int(textinput.get_text()) - 1
+		pygame.display.update()
+		if turn_a == 0 and test2 != 10 and won_o != True:
+			board[test2] = -1
+			turn_a = 1
+		#vert
+		if board[0] == -1 and board[1] == -1 and board[2] == -1:
+			lose_o = True
+		elif board[3] == -1 and board[4] == -1 and board[5] == -1:
+			lose_o = True
+		elif board[6] == -1 and board[7] == -1 and board[8] == -1:
+			lose_o = True
+		#horz
+		elif board[1] == -1 and board[4] == -1 and board[7] == -1:
+			lose_o = True
+		elif board[0] == -1 and board[3] == -1 and board[6] == -1:
+			lose_o = True
+		elif board[2] == -1 and board[5] == -1 and board[8] == -1:
+			lose_o = True
+		#dgonal
+		elif board[0] == -1 and board[4] == -1 and board[8] == -1:
+			lose_o = True
+		elif board[2] == -1 and board[4] == -1 and board[6] == -1:
+			lose_o = True
+
+		b = 0
+		for c in board:
+			if c == 0:
+				b += 1
+		if test2 != 10:
+			reward = 0
+			if lose_o == True:
+				won_text = largeText.render('USER WON', True, black)
+				reward_text = smallText.render('Gold: +100', True, black)
+				save_game['money'] += 100
+				if 80 >= save_game['brain_power']:
+					save_game['brain_power'] += 10 
+				surface.blit(won_text, (int(display_width * 0.25),int(display_height * 0.2)))
+				surface.blit(reward_text, (int(display_width * 0.25),int(display_height * 0.4)))
+				pygame.display.update()
+				pygame.time.delay(5000)
+				mg_loop()
+				reward = -LOSE_PENALTY
+			elif won_o:
+				won_text = largeText.render('AI WON', True, black)
+				#reward_text = smallText.render('Gold: +100', True, black)
+				surface.blit(won_text, (int(display_width * 0.25),int(display_height * 0.2)))
+				pygame.display.update()
+				pygame.time.delay(5000)
+				mg_loop()
+				reward = WON_REWARD
+			elif b == 0:
+				won_text = largeText.render('DRAW', True, black)
+				reward_text = smallText.render('Gold: +50', True, black)
+				save_game['money'] += 50
+				if 95 >= save_game['brain_power'] and 100 > save_game['brain_power']:
+					save_game['brain_power'] += 5
+				surface.blit(won_text, (int(display_width * 0.25),int(display_height * 0.2)))
+				surface.blit(reward_text, (int(display_width * 0.25),int(display_height * 0.4)))
+				pygame.display.update()
+				pygame.time.delay(5000)
+				mg_loop()
+				reward = DRAW_REWARD
+			## NOW WE KNOW THE REWARD, LET'S CALC YO
+			# first we need to obs immediately after the move.
+			new_obs = tuple(board)
+			max_future_q = np.max(q_table[new_obs])
+			current_q = q_table[obs][action]
+	
+			if reward == WON_REWARD:
+				new_q = WON_REWARD
+			else:
+				new_q = (1 - LEARNING_RATE) * current_q + LEARNING_RATE * (reward + DISCOUNT * max_future_q)
+			q_table[obs][action] = new_q
+	
+			episode_reward += reward
+
+		pygame.display.update()
+		clock.tick(24)
+
+def hangnyan():
+	x =  (display_width * 0.30)
+	y = (display_height * 0.50)
+
+	x_change = 0
+	
+	frame_v = 1
+
+	gameExit = False
+
+	while not gameExit:
+		
+		frame_v += 1
+
+		gameExit = general_room_stuff()
+	
+		#event for moving object
+		'''if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_LEFT:
+				x_change = -5
+			elif event.key == pygame.K_RIGHT:
+				x_change = 5
+		if event.type == pygame.KEYUP:
+			if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+				x_change = 0'''
+	
+		x += x_change
+	
+		#fill background with white	
+		bg('Nimp_Background')
+		#gui('home')
+		#Draw Obstacle
+		#things(thing_startx, thing_starty, thing_width, thing_height, black)
+		#thing_starty += thing_speed
+		#draw a car in x y coordinate	
+		pygame.display.update()
+		clock.tick(24)
+ttc_loop()
 pygame.quit()
