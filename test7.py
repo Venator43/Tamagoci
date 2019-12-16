@@ -34,12 +34,12 @@ nyantaro_img2 = pygame.image.load('asset/KYET/Kyet Phase 2 (1).png')
 nyantaro_img2 = pygame.transform.smoothscale(nyantaro_img2, (witdh_nyan, height_nyan))
 car_width = 73
 
-def button(x_t,y_t,w,h,action,param=None):
+def button(x_t,y_t,w,h,action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     if x_t+w > mouse[0] > x_t and y_t+h > mouse[1] > y_t:
         if click[0] == 1 and action != None:
-            action(param)
+            action()
 
     #pygame.draw.rect(surface, red,(x_t,y_t,w,h))
 
@@ -420,6 +420,7 @@ def nmp_loop():
 
 		pygame.display.update()
 		if user_turn == False and n1 > 0:
+			pygame.time.delay(4000)
 			n1 -= (4-n3)
 			user_turn = True
 		if 0 >= n1:
@@ -427,7 +428,8 @@ def nmp_loop():
 				won_text = largeText.render('AI WON', True, black)
 				#reward_text = smallText.render('Gold: +100', True, black)
 				surface.blit(won_text, (int(display_width * 0.25),int(display_height * 0.2)))
-				time.sleep(10)
+				pygame.display.update()
+				pygame.time.delay(5000)
 				mg_loop()
 				#surface.blit(reward_text, (int(display_width * 0.25),int(display_height * 0.4)))
 			elif user_turn == False:
@@ -438,10 +440,11 @@ def nmp_loop():
 					save_game['brain_power'] += 10 
 				surface.blit(won_text, (int(display_width * 0.25),int(display_height * 0.2)))
 				surface.blit(reward_text, (int(display_width * 0.25),int(display_height * 0.4)))
-				time.sleep(10)
+				pygame.display.update()
+				pygame.time.delay(5000)
 				mg_loop()
 
 		pygame.display.update()
 		clock.tick(60)
-nmp_loop()
+mg_loop()
 pygame.quit()
