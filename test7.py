@@ -352,6 +352,8 @@ def nmp_loop():
 		n1 += 1
 	gameExit = False
 	user_turn = True
+	largeText = pygame.font.Font('freesansbold.ttf',100) 
+	smallText = pygame.font.Font('freesansbold.ttf',40) 
 	while not gameExit:
 		mouse = pygame.mouse.get_pos()
 		click = pygame.mouse.get_pressed()
@@ -417,15 +419,27 @@ def nmp_loop():
 				n3 = 3
 
 		pygame.display.update()
-
 		if user_turn == False and n1 > 0:
 			n1 -= (4-n3)
 			user_turn = True
-		if n1 == 0:
+		if 0 >= n1:
 			if user_turn == True :
-				print("ai won")
+				won_text = largeText.render('AI WON', True, black)
+				#reward_text = smallText.render('Gold: +100', True, black)
+				surface.blit(won_text, (int(display_width * 0.25),int(display_height * 0.2)))
+				time.sleep(10)
+				mg_loop()
+				#surface.blit(reward_text, (int(display_width * 0.25),int(display_height * 0.4)))
 			elif user_turn == False:
-				print("User won")
+				won_text = largeText.render('AI WON', True, black)
+				reward_text = smallText.render('Gold: +100', True, black)
+				save_game['money'] += 100
+				if 80 >= save_game['brain_power']:
+					save_game['brain_power'] += 10 
+				surface.blit(won_text, (int(display_width * 0.25),int(display_height * 0.2)))
+				surface.blit(reward_text, (int(display_width * 0.25),int(display_height * 0.4)))
+				time.sleep(10)
+				mg_loop()
 
 		pygame.display.update()
 		clock.tick(60)
