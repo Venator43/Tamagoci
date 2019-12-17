@@ -11,7 +11,9 @@ def new_game():
         'food_stoc': 0,
         'money': 100,
         "last_played": "10-15-1998",
+        "lost": 0,
         "invt": []
+
     }
 
     y = json.dumps(test)
@@ -23,7 +25,6 @@ def new_game():
 def cont_game():
     save = pickle.load(open("save_game.pickle", "rb"))
     return(json.loads(save))
-
 
 '''try:
     save = pickle.load(open("dict.pickle", "rb"))
